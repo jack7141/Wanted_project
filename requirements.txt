@@ -1,0 +1,19 @@
+aiosqlite==0.20.0
+annotated-types==0.7.0
+anyio==4.7.0
+click==8.1.8
+dependency-injector==4.44.0
+exceptiongroup==1.2.2
+fastapi==0.115.6
+greenlet @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_3fdrsxa1og/croot/greenlet_1733860082149/work
+h11==0.14.0
+idna==3.10
+loguru @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_deuhywgtcz/croot/loguru_1729800304209/work
+pydantic==2.10.4
+pydantic_core==2.27.2
+six==1.17.0
+sniffio==1.3.1
+SQLAlchemy @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_3frqduvs8h/croot/sqlalchemy_1725885054432/work
+starlette==0.41.3
+typing_extensions @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_0b3jpv_f79/croot/typing_extensions_1734714864260/work
+uvicorn==0.34.0
