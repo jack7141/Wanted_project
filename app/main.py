@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
 
-# from app.api.v1.router import routers as v1_router
+from app.api.v1.router import routers as v1_router
 from app.core.config import configs
 from app.core.container import Container
 from app.core.exception import CustomHttpException
@@ -49,6 +49,7 @@ def create_app():
     def root():
         return {"status": "OK"}
 
+    _app.include_router(v1_router, prefix=configs.API_V1_PREFIX)
     logger.info(f"app created. Its ENV_NAME: {configs.ENV}")
     return _app
 
