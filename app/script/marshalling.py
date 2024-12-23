@@ -47,6 +47,7 @@ if __name__ == "__main__":
     from sqlalchemy import create_engine
     from sqlalchemy.orm import sessionmaker
 
+    # FIXME: 동적으로 수정
     DATABASE_URI = "postgresql+psycopg2://postgres:password@localhost:5432/dev-wanted"
     engine = create_engine(DATABASE_URI)
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

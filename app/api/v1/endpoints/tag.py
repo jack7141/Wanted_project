@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, status
 from app.core.container import Container
 
 router = APIRouter(
-    prefix="/tag",
+    prefix="/tags",
     tags=["tag"],
     redirect_slashes=False,
 )

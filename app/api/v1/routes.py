@@ -1,10 +1,12 @@
 from fastapi import APIRouter
 
 from app.api.v1.endpoints.tag import router as tag_router
+from app.api.v1.endpoints.company import router as company_router
 
 routers = APIRouter()
 router_list = [
-    tag_router
+    tag_router,
+    company_router
 ]
 
 

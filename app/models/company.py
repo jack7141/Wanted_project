@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship
 from sqlmodel import Field
 
 from app.models.base_model import BaseModel
+from app.models.company_tag import CompanyTag
+
 
 class Company(BaseModel):
     __tablename__ = "companies"
@@ -11,4 +13,4 @@ class Company(BaseModel):
     company_name_en = Column(String, nullable=True)
     company_name_ja = Column(String, nullable=True)
 
-    tags = relationship("Tag", secondary="company_tags", back_populates="companies")
+    tags = relationship("Tag", secondary=CompanyTag.__table__, back_populates="companies")
