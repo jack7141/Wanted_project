@@ -47,3 +47,4 @@ class Database:
             raise
         finally:
             session.close()
+
