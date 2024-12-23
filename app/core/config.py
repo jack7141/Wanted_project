@@ -15,15 +15,15 @@ class Configs(BaseSettings):
     API: str = "/api"
     API_V1_STR: str = "/api/v1"
     API_V2_STR: str = "/api/v2"
-    PROJECT_NAME: str = "fca-api"
+    PROJECT_NAME: str = "wanted-api"
     ENV_DATABASE_MAPPER: dict = {
         "prod": "fca",
-        "stage": "stage-fca",
-        "dev": "dev-fca",
-        "test": "test-fca",
+        "stage": "stage-wanted",
+        "dev": "dev-wanted",
+        "test": "test-wanted",
     }
     DB_ENGINE_MAPPER: dict = {
-        "postgresql": "postgresql",
+        "postgresql": "postgresql+psycopg2",
         "mysql": "mysql+pymysql",
     }
 
@@ -32,10 +32,6 @@ class Configs(BaseSettings):
     # date
     DATETIME_FORMAT: str = "%Y-%m-%dT%H:%M:%S"
     DATE_FORMAT: str = "%Y-%m-%d"
-
-    # auth
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 30  # 60 minutes * 24 hours * 30 days = 30 days
 
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = ["*"]
