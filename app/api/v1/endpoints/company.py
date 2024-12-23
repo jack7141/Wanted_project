@@ -1,7 +1,8 @@
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Header
 
 from app.core.container import Container
+from app.schema.company_schema import CompanyResp
 from app.services.company_service import CompanyService
 
 router = APIRouter(
@@ -10,16 +11,16 @@ router = APIRouter(
     redirect_slashes=False,
 )
 
-# 검색된 회사가 없는경우 404를 리턴합니다.
-# resp = api.get(
-#     "/companies/없는회사", headers=[("x-wanted-language", "ko")]
-# )
-#
-# assert resp.status_code == 404
-@router.get("/{company_id}", status_code=status.HTTP_200_OK)
+
+@router.get("/{company_id}",
+            summary="기업 조회",
+            response_model=CompanyResp
+            )
 @inject
 async def get_company(
     company_id: str,
+    x_wanted_language: str = Header("ko"),
     service: CompanyService = Depends(Provide[Container.company_service]),
 ):
-    return service.get_by_id(company_id)
+    resp = service.read_by_fields(company_name_ko=company_id, eager=True)
+    return resp.dict()

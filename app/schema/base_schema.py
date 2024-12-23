@@ -1,6 +1,9 @@
+import typing
 from datetime import datetime
 from typing import List, Optional, Union
 
+from fastapi.responses import JSONResponse
+from typing import Any, Optional, Type, TypeVar
 from pydantic import BaseModel
 
 
@@ -34,3 +37,13 @@ class FindDateRange(BaseModel):
 
 class Blank(BaseModel):
     pass
+
+
+class APIResponse(BaseModel):
+    class Config:
+        orm_mode = True
+        allow_population_by_field_name = True
+
+
+    def dict(self, by_alias=True, **kwargs):
+        return super().dict(by_alias=by_alias, **kwargs)
