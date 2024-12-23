@@ -9,4 +9,4 @@ class Container(containers.DeclarativeContainer):
         modules=[
         ]
     )
-    db = providers.Singleton(Database, db_url=configs.DB_URL, sync_db_url=configs.SYNC_DB_URL)
+    db = providers.Singleton(Database, db_url=configs.DATABASE_URI)

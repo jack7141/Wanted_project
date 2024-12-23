@@ -1,7 +1,33 @@
 import os
-from pathlib import Path
+from typing import List
 
-from loguru import logger
+from dotenv import load_dotenv
+from pydantic.v1 import BaseSettings
+
+load_dotenv()
+
+ENV: str = ""
+
+
+class Configs(BaseSettings):
+    # base
+    ENV: str = os.getenv("ENV", "dev")
+    API: str = "/api"
+    API_V1_STR: str = "/api/v1"
+    API_V2_STR: str = "/api/v2"
+    PROJECT_NAME: str = "wanted-project"
+    ENV_DATABASE_MAPPER: dict = {
+        "prod": "wanted",
+        "stage": "stage-wanted",
+        "dev": "dev-wanted",
+        "test": "test-wanted",
+    }
+    DB_ENGINE_MAPPER: dict = {
+        "postgresql": "postgresql+psycopg2",
+        "mysql": "mysql+pymysql",
+    }
+
+    PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 class BaseConfig:
@@ -16,52 +42,122 @@ class BaseConfig:
     API_V1_PREFIX: str = "/v1"
     API_V2_PREFIX: str = "/v2"
 
+    # CORS
+    BACKEND_CORS_ORIGINS: List[str] = ["*"]
+
+    # database
+    DB: str = os.getenv("DB", "postgresql")
+    DB_USER: str = os.getenv("DB_USER", "postgres")
+    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "password")
+    DB_HOST: str = os.getenv("DB_HOST", "localhost")
+    DB_PORT: str = os.getenv("DB_PORT", "5432")
+    DB_ENGINE: str = DB_ENGINE_MAPPER.get(DB, "postgresql")
+
+    DATABASE_URI_FORMAT: str = "{db_engine}://{user}:{password}@{host}:{port}/{database}"
+    DATABASE_URI = "{db_engine}://{user}:{password}@{host}:{port}/{database}".format(
+        db_engine=DB_ENGINE,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT,
+        database=ENV_DATABASE_MAPPER[ENV],
+    )
+
+    # find query
+    PAGE = 1
+    PAGE_SIZE = 20
+    ORDERING = "-id"
+
+    class Config:
+        case_sensitive = True
+
+
+class TestConfigs(Configs):
+    ENV: str = "test"
+
+
+configs = Configs()
+
+if ENV == "prod":
+    pass
+elif ENV == "stage":
+    pass
+elif ENV == "test":
+    setting = TestConfigs()
+import os
+from typing import List
+
+from dotenv import load_dotenv
+from pydantic.v1 import BaseSettings
+
+load_dotenv()
+
+ENV: str = ""
+
+
+class Configs(BaseSettings):
+    # base
+    ENV: str = os.getenv("ENV", "dev")
+    API: str = "/api"
+    API_V1_STR: str = "/api/v1"
+    API_V2_STR: str = "/api/v2"
+    PROJECT_NAME: str = "wanted-project"
+    ENV_DATABASE_MAPPER: dict = {
+        "prod": "wanted",
+        "stage": "stage-wanted",
+        "dev": "dev-wanted",
+        "test": "test-wanted",
+    }
+    DB_ENGINE_MAPPER: dict = {
+        "postgresql": "postgresql+psycopg2",
+        "mysql": "mysql+pymysql",
+    }
+
+    PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
     # date
     DATETIME_FORMAT: str = "%Y-%m-%dT%H:%M:%S"
     DATE_FORMAT: str = "%Y-%m-%d"
 
-    # cors
-    BACKEND_CORS_ORIGINS: list[str] = ["*"]
+    # CORS
+    BACKEND_CORS_ORIGINS: List[str] = ["*"]
 
     # database
-    DB_URL = "sqlite+aiosqlite:///:memory:"
-    SYNC_DB_URL = "sqlite:///:memory:"
+    DB: str = os.getenv("DB", "postgresql")
+    DB_USER: str = os.getenv("DB_USER", "postgres")
+    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "password")
+    DB_HOST: str = os.getenv("DB_HOST", "localhost")
+    DB_PORT: str = os.getenv("DB_PORT", "5432")
+    DB_ENGINE: str = DB_ENGINE_MAPPER.get(DB, "postgresql")
+
+    DATABASE_URI_FORMAT: str = "{db_engine}://{user}:{password}@{host}:{port}/{database}"
+    DATABASE_URI = "{db_engine}://{user}:{password}@{host}:{port}/{database}".format(
+        db_engine=DB_ENGINE,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT,
+        database=ENV_DATABASE_MAPPER[ENV],
+    )
+
+    # find query
+    PAGE = 1
+    PAGE_SIZE = 20
+    ORDERING = "-id"
+
+    class Config:
+        case_sensitive = True
 
 
-class TestConfig(BaseConfig):
-    # base
+class TestConfigs(Configs):
     ENV: str = "test"
-    DB_URL = "sqlite+aiosqlite:///:memory:"
-    SYNC_DB_URL = "sqlite:///:memory:"
 
 
-class DevelopConfig(BaseConfig):
-    # base
-    ENV: str = "dev"
-    DB_URL = "sqlite+aiosqlite:///db.sqlite3"
-    SYNC_DB_URL = "sqlite:///db.sqlite3"
+configs = Configs()
 
-
-class StageConfig(BaseConfig):
-    # base
-    ENV: str = "stage"
-
-
-class ProductionConfig(BaseConfig):
-    # base
-    ENV: str = "prod"
-
-
-ENV = os.getenv("ENV", None)
-configs = BaseConfig()
-
-if ENV == "test":
-    configs = TestConfig()
-elif ENV == "dev":
-    configs = DevelopConfig()
+if ENV == "prod":
+    pass
 elif ENV == "stage":
-    configs = StageConfig()
-elif ENV == "prod":
-    configs = ProductionConfig()
-else:
-    logger.info("ENV is not set. It will be set to 'BaseConfig'.")
+    pass
+elif ENV == "test":
+    setting = TestConfigs()
