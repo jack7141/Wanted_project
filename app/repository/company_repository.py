@@ -11,7 +11,7 @@ from app.core.exception import NotFoundError
 
 
 class CompanyRepository(BaseRepository):
-    def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]):
+    def __init__(self, session_factory: Callable[..., Generator[Session, None, None]]):
         self.session_factory = session_factory
         super().__init__(session_factory, Company)
 

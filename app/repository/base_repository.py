@@ -8,15 +8,15 @@ from app.core.config import configs
 from app.core.exception import NotFoundError, DuplicatedError
 from app.models.base_model import BaseModel
 from app.util.query_builder import dict_to_sqlalchemy_filter_options
+from sqlalchemy import desc
 
 T = TypeVar("T", bound=BaseModel)
 
 
 class BaseRepository:
-    def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]], model: Type[T]) -> None:
+    def __init__(self, session_factory: Callable[..., AbstractContextManager], model: Type[T]) -> None:
         self.session_factory = session_factory
         self.model = model
-
     def read_by_options(self, schema: T, eager: bool = False) -> dict:
         with self.session_factory() as session:
             schema_as_dict: dict = schema.dict(exclude_none=True)

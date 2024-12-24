@@ -22,5 +22,5 @@ async def get_company(
     x_wanted_language: str = Header("ko"),
     service: CompanyService = Depends(Provide[Container.company_service]),
 ):
-    resp = service.read_by_fields(company_name_ko=company_id, eager=True)
-    return resp.dict()
+    resp = service.get_company_by_language(company_name_ko=company_id, eager=True, x_wanted_language=x_wanted_language)
+    return resp

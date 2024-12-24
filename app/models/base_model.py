@@ -1,8 +1,7 @@
 from datetime import datetime
 
-from sqlalchemy import Integer
+from sqlalchemy import Integer, Column, DateTime, func
 from sqlalchemy.orm import declared_attr
-from sqlmodel import Column, DateTime, Field, SQLModel, func
 from sqlalchemy import inspect
 import re
 
@@ -24,5 +23,5 @@ class BaseModel(Base):
     def __tablename__(self) -> str:
         return resolve_table_name(self.__name__)
 
-    def to_dict(self):
+    def dict(self):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}

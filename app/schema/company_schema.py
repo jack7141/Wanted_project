@@ -18,16 +18,6 @@ class BaseCompany(BaseModel, metaclass=AllOptional):
 class FindCompany(FindBase, BaseCompany, metaclass=AllOptional): ...
 
 
-class CompanyResp(BaseModel, metaclass=AllOptional):
-    # class TagItems(BaseModel, metaclass=AllOptional):
-    #     tag_name_ko: str
-    #     tag_name_en: str
-    #     tag_name_ja: str
-
-    company_name_ko: str
-    company_name_en: str
-    company_name_ja: str
-    # tags: List[TagItems]
-    
-    def dict(self, **kwargs) -> dict:
-        return super().dict(**kwargs)
+class CompanyResp(APIResponse, metaclass=AllOptional):
+    company_name: str
+    tags: List[str]
