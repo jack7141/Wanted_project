@@ -1,9 +1,15 @@
 from sqlalchemy import Column, String
-from sqlmodel import Field
+from sqlalchemy.orm import relationship
 
 from app.models.base_model import BaseModel
+from app.models.company_tag import CompanyTag
 
 
 class Tag(BaseModel):
-    user_id = Column(String, comment="상담 신청자 유저 아이디")
-    course_id = Column(String, comment="코스 아이디")
+    __tablename__ = "tags"
+
+    tag_name_ko = Column(String, nullable=False)
+    tag_name_en = Column(String, nullable=True)
+    tag_name_ja = Column(String, nullable=True)
+
+    companies = relationship("Company", secondary=CompanyTag.__table__, back_populates="tags")
