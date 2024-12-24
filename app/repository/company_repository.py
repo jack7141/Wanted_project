@@ -42,6 +42,11 @@ class CompanyRepository(BaseRepository):
             language_fields = ["company_name_ko", "company_name_en", "company_name_ja"]
             filters = [getattr(self.model, field).ilike(f"%{value}%") for field in language_fields]
             query = session.query(self.model).filter(or_(*filters))
+
             for eager_field in getattr(self.model, "eagers", []):
                 query = query.options(joinedload(getattr(self.model, eager_field)))
-            return query.first()
+
+            result = query.first()
+            if not result:
+                raise NotFoundError(detail=f"Company not found for search value: {value}")
+            return result
