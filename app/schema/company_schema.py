@@ -21,3 +21,10 @@ class FindCompany(FindBase, BaseCompany, metaclass=AllOptional): ...
 class CompanyResp(APIResponse, metaclass=AllOptional):
     company_name: str
     tags: List[str]
+
+
+# class CompanyResp(APIResponse, metaclass=AllOptional):
+#     company_name_ko: str
+#     company_name_en: str
+#     company_name_ja: str
+#     tags: List[BaseTag]

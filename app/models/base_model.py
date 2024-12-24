@@ -1,4 +1,5 @@
 from datetime import datetime
+from fastapi import HTTPException, Header
 
 from sqlalchemy import Integer, Column, DateTime, func
 from sqlalchemy.orm import declared_attr
@@ -6,6 +7,16 @@ from sqlalchemy import inspect
 import re
 
 from app.models import Base
+
+LANGUAGE_ACTION_MAP = {"ko": "company_name_ko", "en": "company_name_en", "ja": "company_name_ja"}
+
+def get_clean_language(x_wanted_language: str = Header("ko")) -> str:
+    language = ''.join(c for c in x_wanted_language if c.isprintable()).strip()
+
+    if language not in ["ko", "en", "ja"]:
+        raise HTTPException(status_code=400, detail="Invalid language")
+
+    return language
 
 def resolve_table_name(name: str) -> str:
     names = re.split("(?=[A-Z])", name)

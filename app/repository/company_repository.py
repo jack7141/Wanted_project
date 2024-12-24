@@ -9,6 +9,8 @@ from app.repository.base_repository import BaseRepository
 
 from app.core.exception import NotFoundError
 
+from sqlalchemy import or_
+
 
 class CompanyRepository(BaseRepository):
     def __init__(self, session_factory: Callable[..., Generator[Session, None, None]]):
@@ -30,3 +32,16 @@ class CompanyRepository(BaseRepository):
             if not query:
                 raise NotFoundError(detail=f"not found values from Request Filter: {filters}")
             return query
+
+    def filter_by_field(self, field: str, value: str):
+        with self.session_factory() as session:
+            return session.query(self.model).filter(getattr(self.model, field).ilike(f"%{value}%")).all()
+
+    def filter_across_languages(self, value: str):
+        with self.session_factory() as session:
+            language_fields = ["company_name_ko", "company_name_en", "company_name_ja"]
+            filters = [getattr(self.model, field).ilike(f"%{value}%") for field in language_fields]
+            query = session.query(self.model).filter(or_(*filters))
+            for eager_field in getattr(self.model, "eagers", []):
+                query = query.options(joinedload(getattr(self.model, eager_field)))
+            return query.first()
